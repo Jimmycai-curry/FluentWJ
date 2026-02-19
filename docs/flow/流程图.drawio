@@ -1,0 +1,269 @@
+<mxfile host="app.diagrams.net" modified="2026-02-19T08:00:00.000Z" agent="FluentWJ" version="21.0.0" type="device">
+  <diagram id="fluentwj-flow" name="FluentWJ 核心流程">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- 标题 -->
+        <mxCell id="title" value="FluentWJ 跨境商务写作助手 - 核心流程图" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="450" y="20" width="400" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- ========== 流程开始 ========== -->
+        <mxCell id="start" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="625" y="70" width="50" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="start-label" value="流程开始" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="610" y="125" width="80" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- ========== 1. 用户端输入 ========== -->
+        <mxCell id="user-input" value="用户端输入结构化数据&#xa;（场景/语气/收件人/核心要点）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="570" y="160" width="160" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- ========== 2. 服务端入口 ========== -->
+        <mxCell id="api-entry" value="API 网关入口&#xa;/api/generate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="595" y="235" width="110" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- ========== 3. 实名认证与权限校验 ========== -->
+        <mxCell id="auth-check" value="实名认证与权限校验" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="580" y="300" width="140" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- 认证判断 -->
+        <mxCell id="auth-pass" value="通过?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="610" y="360" width="80" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 认证失败 -->
+        <mxCell id="auth-fail" value="返回 401 错误&#xa;请先登录" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="740" y="365" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- ========== 4. 前置安全网关 ========== -->
+        <mxCell id="security-gateway" value="前置安全网关" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;fontStyle=1;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="480" y="440" width="340" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- 本地敏感词匹配 -->
+        <mxCell id="local-check" value="本地敏感词匹配&#xa;(FALLBACK_SENSITIVE_KEYWORDS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="500" y="470" width="140" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 云端内容安全检测 -->
+        <mxCell id="cloud-check" value="阿里云内容安全检测&#xa;(AI 安全护栏 API)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="660" y="470" width="140" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 安全检测判断 -->
+        <mxCell id="security-pass" value="通过?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="610" y="560" width="80" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 违规拦截 -->
+        <mxCell id="violation" value="违规拦截&#xa;记录审计日志&#xa;返回友好提示" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="740" y="555" width="100" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- ========== 5. 提示词组装 ========== -->
+        <mxCell id="prompt-assembly" value="提示词组装&#xa;（用户输入 + 系统预设模板）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="565" y="635" width="170" height="45" as="geometry" />
+        </mxCell>
+        
+        <!-- ========== 6. DeepSeek 大模型 ========== -->
+        <mxCell id="deepseek" value="调用 DeepSeek-V3&#xa;文本生成推理" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4383f7;strokeColor=#2a5db0;fontSize=11;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="580" y="705" width="140" height="45" as="geometry" />
+        </mxCell>
+        
+        <!-- ========== 7. 后置安全检测 ========== -->
+        <mxCell id="post-check" value="后置安全检测&#xa;（二次内容审核）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="580" y="775" width="140" height="45" as="geometry" />
+        </mxCell>
+        
+        <!-- 后置检测判断 -->
+        <mxCell id="post-pass" value="通过?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="610" y="840" width="80" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- 后置检测失败 -->
+        <mxCell id="post-fail" value="内容过滤&#xa;重新生成" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="740" y="845" width="100" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- ========== 8. 水印植入 ========== -->
+        <mxCell id="watermark" value="水印植入" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;fontStyle=1;verticalAlign=top;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="200" y="770" width="240" height="90" as="geometry" />
+        </mxCell>
+        
+        <!-- 显式标识 -->
+        <mxCell id="explicit" value="显式标识添加&#xa;（邮件尾部声明）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="215" y="800" width="100" height="45" as="geometry" />
+        </mxCell>
+        
+        <!-- 隐式溯源 -->
+        <mxCell id="implicit" value="隐式溯源编码&#xa;（零宽字符水印）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="325" y="800" width="100" height="45" as="geometry" />
+        </mxCell>
+        
+        <!-- ========== 9. 返回用户端 ========== -->
+        <mxCell id="return-user" value="生成结果返回用户端展示" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="235" y="690" width="170" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- ========== 10. 异步写入审计日志 ========== -->
+        <mxCell id="async-log" value="异步写入审计日志数据库&#xa;（audit_logs + mail_histories）" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="215" y="590" width="210" height="45" as="geometry" />
+        </mxCell>
+        
+        <!-- ========== 流程结束 ========== -->
+        <mxCell id="end" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="295" y="520" width="50" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="end-label" value="流程结束" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="280" y="575" width="80" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- ========== 连接线 ========== -->
+        
+        <!-- 开始 → 用户输入 -->
+        <mxCell id="a1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#82b366;endArrow=block;endFill=1;" edge="1" parent="1" source="start" target="user-input">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- 用户输入 → API入口 -->
+        <mxCell id="a2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#82b366;endArrow=block;endFill=1;" edge="1" parent="1" source="user-input" target="api-entry">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- API入口 → 认证 -->
+        <mxCell id="a3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#6c8ebf;endArrow=block;endFill=1;" edge="1" parent="1" source="api-entry" target="auth-check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- 认证 → 判断 -->
+        <mxCell id="a4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#6c8ebf;endArrow=block;endFill=1;" edge="1" parent="1" source="auth-check" target="auth-pass">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- 认证失败 -->
+        <mxCell id="a5" value="否" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;fontSize=10;fontStyle=1;" edge="1" parent="1" source="auth-pass" target="auth-fail">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- 认证通过 → 安全网关 -->
+        <mxCell id="a6" value="是" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#82b366;endArrow=block;endFill=1;fontSize=10;fontStyle=1;" edge="1" parent="1" source="auth-pass" target="security-gateway">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- 安全网关 → 判断 -->
+        <mxCell id="a7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#b85450;endArrow=block;endFill=1;" edge="1" parent="1" source="security-gateway" target="security-pass">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- 安全不通过 → 违规 -->
+        <mxCell id="a8" value="否" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#b85450;endArrow=block;endFill=1;fontSize=10;fontStyle=1;" edge="1" parent="1" source="security-pass" target="violation">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- 安全通过 → 提示词组装 -->
+        <mxCell id="a9" value="是" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#82b366;endArrow=block;endFill=1;fontSize=10;fontStyle=1;" edge="1" parent="1" source="security-pass" target="prompt-assembly">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- 提示词组装 → DeepSeek -->
+        <mxCell id="a10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#4383f7;endArrow=block;endFill=1;" edge="1" parent="1" source="prompt-assembly" target="deepseek">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- DeepSeek → 后置检测 -->
+        <mxCell id="a11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#4383f7;endArrow=block;endFill=1;" edge="1" parent="1" source="deepseek" target="post-check">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- 后置检测 → 判断 -->
+        <mxCell id="a12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#b85450;endArrow=block;endFill=1;" edge="1" parent="1" source="post-check" target="post-pass">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- 后置不通过 → 重新生成 -->
+        <mxCell id="a13" value="否" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#b85450;endArrow=block;endFill=1;fontSize=10;dashed=1;" edge="1" parent="1" source="post-pass" target="post-fail">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- 重新生成回到DeepSeek -->
+        <mxCell id="a14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#b85450;endArrow=block;endFill=1;dashed=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="post-fail" target="deepseek">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="870" y="865" />
+              <mxPoint x="870" y="727" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- 后置通过 → 水印植入 -->
+        <mxCell id="a15" value="是" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#82b366;endArrow=block;endFill=1;fontSize=10;fontStyle=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="post-pass" target="watermark">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="500" y="865" />
+              <mxPoint x="500" y="815" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- 水印 → 返回用户 -->
+        <mxCell id="a16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#82b366;endArrow=block;endFill=1;" edge="1" parent="1" source="watermark" target="return-user">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- 返回用户 → 异步日志 -->
+        <mxCell id="a17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#9673a6;endArrow=block;endFill=1;dashed=1;" edge="1" parent="1" source="return-user" target="async-log">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- 异步日志 → 结束 -->
+        <mxCell id="a18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#82b366;endArrow=block;endFill=1;" edge="1" parent="1" source="async-log" target="end">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- ========== 图例 ========== -->
+        <mxCell id="legend-box" value="图例" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;fontStyle=1;verticalAlign=top;spacingTop=3;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="860" y="160" width="180" height="170" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="l1" value="用户端操作" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="880" y="185" width="70" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="l2" value="API 网关" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="960" y="185" width="60" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="l3" value="安全检测" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="880" y="220" width="70" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="l4" value="AI 生成" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4383f7;strokeColor=#2a5db0;fontSize=9;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="960" y="220" width="60" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="l5" value="业务处理" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="880" y="255" width="70" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="l6" value="认证校验" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="960" y="255" width="60" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="l7" value="—— 主流程" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="875" y="290" width="70" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="l8" value="- - - 异步/回退" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="945" y="290" width="80" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- 版本 -->
+        <mxCell id="ver" value="FluentWJ v1.0 | 2026-02-19" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=9;fontColor=#999999;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="880" width="150" height="20" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
