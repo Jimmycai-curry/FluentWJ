@@ -9,8 +9,24 @@ export function Footer() {
       <div className="flex items-center gap-4">
         <span>© 2024 FluentWJ. All rights reserved.</span>
         <span className="h-3 w-[1px] bg-slate-200 dark:bg-slate-800"></span>
-        <a className="hover:text-primary transition-colors" href="#">隐私政策</a>
-        <a className="hover:text-primary transition-colors" href="#">服务协议</a>
+        {/* 隐私政策 - 新窗口打开 */}
+        <a
+          className="hover:text-primary transition-colors"
+          href="/privacy"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          隐私政策
+        </a>
+        {/* 服务协议 - 新窗口打开 */}
+        <a
+          className="hover:text-primary transition-colors"
+          href="/terms"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          服务协议
+        </a>
       </div>
 
       {/* 右侧备案信息 */}

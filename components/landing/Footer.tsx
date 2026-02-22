@@ -47,15 +47,23 @@ export default function Footer() {
             >
               AI 算法备案登记
             </a>
+            {/* 隐私政策 - 跳转到 /privacy 页面 */}
             <a
               className="text-slate-600 dark:text-slate-400 hover:text-primary text-sm font-medium transition-colors"
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                alert('隐私政策');
-              }}
+              href="/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               隐私政策
+            </a>
+            {/* 服务协议 - 跳转到 /terms 页面 */}
+            <a
+              className="text-slate-600 dark:text-slate-400 hover:text-primary text-sm font-medium transition-colors"
+              href="/terms"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              服务协议
             </a>
           </div>
         </div>
