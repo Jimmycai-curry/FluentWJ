@@ -16,11 +16,11 @@
 
 import { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { 
-  validatePhone, 
-  validateCode, 
-  validatePassword, 
-  validateAgreement 
+import {
+  validatePhone,
+  validateCode,
+  validatePassword,
+  validateAgreement
 } from "@/utils/validation";
 
 // 登录模式类型
@@ -61,6 +61,20 @@ export default function LoginForm({ onSubmit, isLoading = false }: LoginFormProp
   // 密码可见性状态
   const [showPassword, setShowPassword] = useState(false);
 
+  /**
+   * 显示 Toast 提示
+   * @param type - 提示类型：success/error/info/warning
+   * @param message - 提示内容
+   */
+  const showToast = (type: "success" | "error" | "info" | "warning", message: string) => {
+    // 触发自定义事件，由 ToastContainer 统一处理显示
+    window.dispatchEvent(
+      new CustomEvent("show-toast", {
+        detail: { type, message, duration: 3000 }
+      })
+    );
+  };
+
   // 验证码倒计时效果
   useEffect(() => {
     if (countdown <= 0) return;
@@ -98,10 +112,10 @@ export default function LoginForm({ onSubmit, isLoading = false }: LoginFormProp
     // 验证手机号
     const phoneValidation = validatePhone(formData.phone);
     if (!phoneValidation.isValid) {
-      alert(phoneValidation.error);
+      showToast("error", phoneValidation.error || "手机号格式错误");
       return;
     }
-    
+
     setIsGettingCode(true);
 
     try {
@@ -110,20 +124,21 @@ export default function LoginForm({ onSubmit, isLoading = false }: LoginFormProp
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone: formData.phone }),
       });
-      
+
       const result = await response.json();
-      
+
       if (!result.success) {
-        alert(result.message || '发送验证码失败');
+        showToast("error", result.message || '发送验证码失败');
         setIsGettingCode(false);
         return;
       }
-      
+
       // 发送成功，启动倒计时
+      showToast("success", "验证码已发送");
       setCountdown(60);
     } catch (error) {
       console.error('发送验证码失败:', error);
-      alert('发送验证码失败，请稍后重试');
+      showToast("error", '发送验证码失败，请稍后重试');
       setIsGettingCode(false);
     }
   };
@@ -133,42 +148,43 @@ export default function LoginForm({ onSubmit, isLoading = false }: LoginFormProp
    */
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    
+
     // 1. 验证手机号
     const phoneValidation = validatePhone(formData.phone);
     if (!phoneValidation.isValid) {
-      alert(phoneValidation.error);
+      showToast("error", phoneValidation.error || "手机号格式错误");
       return;
     }
-    
+
     // 2. 根据登录模式验证验证码或密码
     if (loginMode === 'code') {
       const codeValidation = validateCode(formData.code || '');
       if (!codeValidation.isValid) {
-        alert(codeValidation.error);
+        showToast("error", codeValidation.error || "验证码格式错误");
         return;
       }
     } else {
       const passwordValidation = validatePassword(formData.password || '');
       if (!passwordValidation.isValid) {
-        alert(passwordValidation.error);
+        showToast("error", passwordValidation.error || "密码格式错误");
         return;
       }
     }
-    
+
     // 3. 验证协议勾选
     const agreementValidation = validateAgreement(formData.agreed);
     if (!agreementValidation.isValid) {
-      alert(agreementValidation.error);
+      // 使用 warning 类型提示用户需要勾选协议
+      showToast("warning", agreementValidation.error || "请勾选协议");
       return;
     }
-    
+
     // 4. 如果父组件提供了 onSubmit 回调，调用它
     if (onSubmit) {
       onSubmit(formData, loginMode);
       return;
     }
-    
+
     // 5. 默认行为：调用真实登录 API
     try {
       const response = await fetch('/api/auth/login', {
@@ -181,17 +197,17 @@ export default function LoginForm({ onSubmit, isLoading = false }: LoginFormProp
           mode: loginMode
         }),
       });
-      
+
       const result = await response.json();
-      
+
       if (!result.success) {
-        alert(result.message || '登录失败');
+        showToast("error", result.message || '登录失败');
         return;
       }
-      
+
       // Token 已通过 HttpOnly Cookie 自动设置，无需手动存储
       // 后端在响应中设置了 auth_token Cookie，浏览器会自动保存
-      
+
       // 检查是否需要设置密码
       if (result.needsPasswordSetup) {
         router.push('/set-password');
@@ -200,7 +216,7 @@ export default function LoginForm({ onSubmit, isLoading = false }: LoginFormProp
       }
     } catch (error) {
       console.error('登录失败:', error);
-      alert('登录失败，请稍后重试');
+      showToast("error", '登录失败，请稍后重试');
     }
   };
 
