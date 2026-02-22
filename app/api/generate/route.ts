@@ -13,16 +13,17 @@ import { ErrorMessages } from '@/types/ai';
 
 /**
  * 请求体校验 Schema
+ * Zod v4 使用 message 参数替代 errorMap
  */
 const generateSchema = z.object({
   scenario: z.enum(['email', 'report', 'proposal', 'notice'], {
-    errorMap: () => ({ message: '业务场景必须是 email, report, proposal 或 notice' })
+    message: '业务场景必须是 email, report, proposal 或 notice'
   }),
   tone: z.enum(['formal', 'friendly', 'urgent', 'humorous'], {
-    errorMap: () => ({ message: '语气必须是 formal, friendly, urgent 或 humorous' })
+    message: '语气必须是 formal, friendly, urgent 或 humorous'
   }),
   language: z.enum(['zh-CN', 'en-US', 'zh-TW', 'ja-JP', 'ko-KR'], {
-    errorMap: () => ({ message: '语言必须是支持的语言之一' })
+    message: '语言必须是支持的语言之一'
   }),
   recipientName: z.string().min(1, '收件人姓名不能为空').max(100, '收件人姓名最多100个字符'),
   recipientRole: z.string().min(1, '收件人身份不能为空').max(200, '收件人身份最多200个字符'),
@@ -87,7 +88,8 @@ export async function POST(request: NextRequest) {
 
     const validation = generateSchema.safeParse(body);
     if (!validation.success) {
-      const errorMessage = validation.error.errors[0].message;
+      // Zod v4 使用 issues 替代 errors
+      const errorMessage = validation.error.issues[0].message;
       console.warn('[API /generate] 参数校验失败:', errorMessage);
 
       return NextResponse.json({

@@ -6,39 +6,58 @@ import { getDashboardStats, getUserGrowthTrend, getLatestUsers } from '@/service
 import { verifyToken } from '@/utils/jwt'
 import { DashboardResponse } from '@/types/admin'
 
+// 定义管理员验证结果的类型
+interface AdminVerifyResult {
+  payload: { userId: string; phone: string; role: number } | null
+  response: NextResponse | null
+}
+
 /**
  * 验证管理员权限
  * 从 Cookie 读取 JWT Token 并验证，确保用户为管理员（role = 0）
+ * 统一返回 { payload, response } 格式，避免 TypeScript 类型推断问题
  */
-async function verifyAdmin(req: NextRequest) {
-  // 从 Cookie 获取 Token（Middleware 已验证过，这里重新验证确保安全）
+async function verifyAdmin(req: NextRequest): Promise<AdminVerifyResult> {
+  // 从 Cookie 获取 Token
   const token = req.cookies.get('auth_token')?.value
   
+  // Token 不存在
   if (!token) {
-    return NextResponse.json(
-      { success: false, error: 'Missing or invalid token' },
-      { status: 401 }
-    )
+    return {
+      payload: null,
+      response: NextResponse.json(
+        { success: false, error: 'Missing or invalid token' },
+        { status: 401 }
+      )
+    }
   }
 
   // 验证 Token
   const payload = await verifyToken(token)
 
+  // Token 无效或过期
   if (!payload) {
-    return NextResponse.json(
-      { success: false, error: 'Invalid or expired token' },
-      { status: 401 }
-    )
+    return {
+      payload: null,
+      response: NextResponse.json(
+        { success: false, error: 'Invalid or expired token' },
+        { status: 401 }
+      )
+    }
   }
 
   // 验证管理员角色（role = 0）
   if (payload.role !== 0) {
-    return NextResponse.json(
-      { success: false, error: 'Insufficient permissions. Admin role required.' },
-      { status: 403 }
-    )
+    return {
+      payload: null,
+      response: NextResponse.json(
+        { success: false, error: 'Insufficient permissions. Admin role required.' },
+        { status: 403 }
+      )
+    }
   }
 
+  // 验证成功
   return { payload, response: null }
 }
 
@@ -64,7 +83,8 @@ export async function GET(request: NextRequest) {
       return authResult.response
     }
 
-    const { payload } = authResult
+    // 此时 payload 一定存在（response 为 null 时 payload 必定有值）
+    const payload = authResult.payload!
     console.log(`[API] 管理员验证通过: ${payload.userId}`)
 
     // 2. 并行调用 3 个 Service 函数获取数据

@@ -11,7 +11,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { exportOperationLogs, logAdminOperation } from '@/services/adminOperationLog.service';
-import { getClientIp } from '@/utils/request';
+import { getClientIP } from '@/utils/request';
 
 /**
  * GET 处理函数：导出操作日志为 CSV
@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
     // TODO: 记录操作日志（需要从 request 中获取管理员 ID）
     // 这里暂时注释，等待 middleware 传递管理员 ID
     // const adminId = request.headers.get('x-admin-id');
-    // const ip = getClientIp(request);
+    // const ip = getClientIP(request);
     // if (adminId) {
     //   await logAdminOperation({
     //     adminId,

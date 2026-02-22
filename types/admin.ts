@@ -54,8 +54,8 @@ export interface LatestUser {
 export interface LatestUserData {
   id: string;                    // 用户 UUID
   phone: string;                 // 手机号（完整显示）
-  status: number;                // 状态：0=封禁, 1=正常
-  created_time: Date;            // 注册时间
+  status: number | null;                // 状态：0=封禁, 1=正常
+  created_time: Date | null;            // 注册时间
   last_login_time: Date | null;  // 最后登录时间
 }
 

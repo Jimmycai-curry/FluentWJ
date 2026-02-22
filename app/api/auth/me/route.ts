@@ -54,8 +54,9 @@ export async function GET(request: NextRequest) {
       user: {
         id: user.id,
         phone: user.phone,
-        name: user.name, // 返回用户名
-        avatar: user.avatar, // 返回头像 URL
+        // Prisma 返回 null，但类型要求 undefined，需要转换
+        name: user.name ?? undefined,
+        avatar: user.avatar ?? undefined,
         role: user.role ?? 1,
         status: user.status ?? 1,
         lastLoginTime: user.last_login_time?.toISOString(),

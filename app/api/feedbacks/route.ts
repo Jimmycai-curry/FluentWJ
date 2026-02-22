@@ -18,8 +18,9 @@ import { submitUserFeedback } from '@/services/feedback.service';
  */
 const feedbackSchema = z.object({
   logId: z.string().uuid('logId 必须是有效的 UUID 格式'),
+  // Zod v4 使用 message 参数替代 errorMap
   type: z.enum(['SUGGESTION', 'REPORT', 'CUSTOM'], {
-    errorMap: () => ({ message: '反馈类型必须是 SUGGESTION、REPORT 或 CUSTOM' })
+    message: '反馈类型必须是 SUGGESTION、REPORT 或 CUSTOM'
   }),
   content: z.string()
     .min(1, '反馈内容不能为空')
@@ -55,7 +56,8 @@ export async function POST(request: NextRequest) {
 
     const validation = feedbackSchema.safeParse(body);
     if (!validation.success) {
-      const errorMessage = validation.error.errors[0].message;
+      // Zod v4 使用 issues 替代 errors
+      const errorMessage = validation.error.issues[0].message;
       console.warn('[API /feedbacks] 参数校验失败:', errorMessage);
 
       return NextResponse.json({

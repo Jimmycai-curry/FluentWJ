@@ -497,7 +497,8 @@ export class HistoryService {
       console.log('[HistoryService] 设置模式: 设置为', newFavoriteStatus)
     } else {
       // 模式2：切换状态（切换模式）
-      newFavoriteStatus = !history.is_favorite
+      // is_favorite 可能为 null，默认为 false
+      newFavoriteStatus = !(history.is_favorite ?? false)
       console.log('[HistoryService] 切换模式:', history.is_favorite, '->', newFavoriteStatus)
     }
 
@@ -519,10 +520,10 @@ export class HistoryService {
       isFavorite: updated.is_favorite
     })
 
-    // 5. 返回结果
+    // 5. 返回结果（处理可能的 null 值）
     return {
       id: updated.id,
-      isFavorite: updated.is_favorite
+      isFavorite: updated.is_favorite ?? false
     }
   }
 

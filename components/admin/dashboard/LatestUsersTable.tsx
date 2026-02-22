@@ -28,10 +28,13 @@ function generateAvatar(phone: string): string {
 
 /**
  * 格式化注册时间（标准格式）
- * @param date - 日期对象
+ * @param date - 日期对象或 null
  * @returns 格式化后的时间字符串，如 "2024-01-16 14:30"
  */
-function formatRegisteredTime(date: Date): string {
+function formatRegisteredTime(date: Date | null): string {
+  if (!date) {
+    return '未知'
+  }
   return new Date(date).toLocaleString('zh-CN', {
     year: 'numeric',
     month: '2-digit',
