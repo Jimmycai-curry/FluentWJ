@@ -236,7 +236,27 @@ export function ResultViewer({ content = "", isLoading = false, isEmpty = true, 
           {/* 生成内容展示 */}
           {!isLoading && content && (
             <div className="whitespace-pre-wrap">
-              {content}
+              {(() => {
+                // 用正则匹配末尾的 AI 标识行
+                const aiMarker = '【AI 生成】本内容由 FluentWJ AI 算法辅助生成';
+                const lastIndex = content.lastIndexOf(aiMarker);
+                
+                if (lastIndex === -1) {
+                  // 没有找到标识，直接显示全部
+                  return content;
+                }
+                
+                // 分离正文和 AI 标识
+                const mainContent = content.slice(0, lastIndex);
+                const aiPart = content.slice(lastIndex);
+                
+                return (
+                  <>
+                    {mainContent}
+                    <em className="text-slate-400 text-sm italic block mt-4">{aiPart}</em>
+                  </>
+                );
+              })()}
             </div>
           )}
         </div>
@@ -248,7 +268,7 @@ export function ResultViewer({ content = "", isLoading = false, isEmpty = true, 
           {/* Info 图标 - 使用文字占位 */}
           <span className="text-primary/70 text-sm">ℹ️</span>
           <p>
-            由 FluentWJ 生成。AI 算法提供内容，仅供参考。请在发送前核实关键信息。
+            【AI 生成】本内容由 FluentWJ AI 算法辅助生成，仅供商务写作参考，不构成任何法律要约或承诺，请您在使用前核实全部信息真实性。
           </p>
         </div>
       </div>

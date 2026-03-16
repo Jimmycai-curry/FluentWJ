@@ -33,6 +33,7 @@ CREATE TABLE audit_logs (
     
     model_name VARCHAR(50),                  -- 底层模型名称（如 DeepSeek-V3）
     audit_token TEXT,                        -- 零宽水印/溯源标识
+    content_hash VARCHAR(64),               -- AI生成内容（含水印）的 SHA-256 哈希值，用于内容防篡改验证
     
     status SMALLINT DEFAULT 1,               -- 1: 通过(pass), 2: 违规拦截(block)
     is_sensitive BOOLEAN DEFAULT FALSE,      -- 是否命中外部审核 API 的敏感词
@@ -101,6 +102,7 @@ COMMENT ON COLUMN audit_logs.input_prompt IS '用户输入的原始撰写需求/
 COMMENT ON COLUMN audit_logs.output_content IS 'AI 生成的最终文本内容';
 COMMENT ON COLUMN audit_logs.model_name IS '底层调用的大模型名称及版本（如：DeepSeek-V3）';
 COMMENT ON COLUMN audit_logs.audit_token IS '安全溯源标识（用于识别 AI 生成内容的零宽水印 ID）';
+COMMENT ON COLUMN audit_logs.content_hash IS 'AI生成内容（含水印）的 SHA-256 哈希值（64位十六进制），用于内容防篡改验证';
 COMMENT ON COLUMN audit_logs.status IS '审核状态：1-通过(Pass), 2-违规拦截(Block)';
 COMMENT ON COLUMN audit_logs.is_sensitive IS '是否命中了外部安全接口（如阿里云）的敏感词检测';
 COMMENT ON COLUMN audit_logs.external_audit_id IS '外部审核接口（阿里云/腾讯云）的请求流水号 RequestID';

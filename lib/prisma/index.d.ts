@@ -2291,6 +2291,7 @@ export namespace Prisma {
     output_content: string | null
     model_name: string | null
     audit_token: string | null
+    content_hash: string | null
     status: number | null
     is_sensitive: boolean | null
     external_audit_id: string | null
@@ -2308,6 +2309,7 @@ export namespace Prisma {
     output_content: string | null
     model_name: string | null
     audit_token: string | null
+    content_hash: string | null
     status: number | null
     is_sensitive: boolean | null
     external_audit_id: string | null
@@ -2325,6 +2327,7 @@ export namespace Prisma {
     output_content: number
     model_name: number
     audit_token: number
+    content_hash: number
     status: number
     is_sensitive: number
     external_audit_id: number
@@ -2352,6 +2355,7 @@ export namespace Prisma {
     output_content?: true
     model_name?: true
     audit_token?: true
+    content_hash?: true
     status?: true
     is_sensitive?: true
     external_audit_id?: true
@@ -2369,6 +2373,7 @@ export namespace Prisma {
     output_content?: true
     model_name?: true
     audit_token?: true
+    content_hash?: true
     status?: true
     is_sensitive?: true
     external_audit_id?: true
@@ -2386,6 +2391,7 @@ export namespace Prisma {
     output_content?: true
     model_name?: true
     audit_token?: true
+    content_hash?: true
     status?: true
     is_sensitive?: true
     external_audit_id?: true
@@ -2490,6 +2496,7 @@ export namespace Prisma {
     output_content: string
     model_name: string | null
     audit_token: string | null
+    content_hash: string | null
     status: number | null
     is_sensitive: boolean | null
     external_audit_id: string | null
@@ -2526,6 +2533,7 @@ export namespace Prisma {
     output_content?: boolean
     model_name?: boolean
     audit_token?: boolean
+    content_hash?: boolean
     status?: boolean
     is_sensitive?: boolean
     external_audit_id?: boolean
@@ -2543,6 +2551,7 @@ export namespace Prisma {
     output_content?: boolean
     model_name?: boolean
     audit_token?: boolean
+    content_hash?: boolean
     status?: boolean
     is_sensitive?: boolean
     external_audit_id?: boolean
@@ -2560,6 +2569,7 @@ export namespace Prisma {
     output_content?: boolean
     model_name?: boolean
     audit_token?: boolean
+    content_hash?: boolean
     status?: boolean
     is_sensitive?: boolean
     external_audit_id?: boolean
@@ -2577,13 +2587,14 @@ export namespace Prisma {
     output_content?: boolean
     model_name?: boolean
     audit_token?: boolean
+    content_hash?: boolean
     status?: boolean
     is_sensitive?: boolean
     external_audit_id?: boolean
     created_time?: boolean
   }
 
-  export type audit_logsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "user_phone" | "user_ip" | "scene" | "tone" | "input_prompt" | "output_content" | "model_name" | "audit_token" | "status" | "is_sensitive" | "external_audit_id" | "created_time", ExtArgs["result"]["audit_logs"]>
+  export type audit_logsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "user_id" | "user_phone" | "user_ip" | "scene" | "tone" | "input_prompt" | "output_content" | "model_name" | "audit_token" | "content_hash" | "status" | "is_sensitive" | "external_audit_id" | "created_time", ExtArgs["result"]["audit_logs"]>
 
   export type $audit_logsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "audit_logs"
@@ -2599,6 +2610,7 @@ export namespace Prisma {
       output_content: string
       model_name: string | null
       audit_token: string | null
+      content_hash: string | null
       status: number | null
       is_sensitive: boolean | null
       external_audit_id: string | null
@@ -3036,6 +3048,7 @@ export namespace Prisma {
     readonly output_content: FieldRef<"audit_logs", 'String'>
     readonly model_name: FieldRef<"audit_logs", 'String'>
     readonly audit_token: FieldRef<"audit_logs", 'String'>
+    readonly content_hash: FieldRef<"audit_logs", 'String'>
     readonly status: FieldRef<"audit_logs", 'Int'>
     readonly is_sensitive: FieldRef<"audit_logs", 'Boolean'>
     readonly external_audit_id: FieldRef<"audit_logs", 'String'>
@@ -6749,6 +6762,7 @@ export namespace Prisma {
     output_content: 'output_content',
     model_name: 'model_name',
     audit_token: 'audit_token',
+    content_hash: 'content_hash',
     status: 'status',
     is_sensitive: 'is_sensitive',
     external_audit_id: 'external_audit_id',
@@ -6986,6 +7000,7 @@ export namespace Prisma {
     output_content?: StringFilter<"audit_logs"> | string
     model_name?: StringNullableFilter<"audit_logs"> | string | null
     audit_token?: StringNullableFilter<"audit_logs"> | string | null
+    content_hash?: StringNullableFilter<"audit_logs"> | string | null
     status?: IntNullableFilter<"audit_logs"> | number | null
     is_sensitive?: BoolNullableFilter<"audit_logs"> | boolean | null
     external_audit_id?: StringNullableFilter<"audit_logs"> | string | null
@@ -7003,6 +7018,7 @@ export namespace Prisma {
     output_content?: SortOrder
     model_name?: SortOrderInput | SortOrder
     audit_token?: SortOrderInput | SortOrder
+    content_hash?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
     is_sensitive?: SortOrderInput | SortOrder
     external_audit_id?: SortOrderInput | SortOrder
@@ -7023,6 +7039,7 @@ export namespace Prisma {
     output_content?: StringFilter<"audit_logs"> | string
     model_name?: StringNullableFilter<"audit_logs"> | string | null
     audit_token?: StringNullableFilter<"audit_logs"> | string | null
+    content_hash?: StringNullableFilter<"audit_logs"> | string | null
     status?: IntNullableFilter<"audit_logs"> | number | null
     is_sensitive?: BoolNullableFilter<"audit_logs"> | boolean | null
     external_audit_id?: StringNullableFilter<"audit_logs"> | string | null
@@ -7040,6 +7057,7 @@ export namespace Prisma {
     output_content?: SortOrder
     model_name?: SortOrderInput | SortOrder
     audit_token?: SortOrderInput | SortOrder
+    content_hash?: SortOrderInput | SortOrder
     status?: SortOrderInput | SortOrder
     is_sensitive?: SortOrderInput | SortOrder
     external_audit_id?: SortOrderInput | SortOrder
@@ -7065,6 +7083,7 @@ export namespace Prisma {
     output_content?: StringWithAggregatesFilter<"audit_logs"> | string
     model_name?: StringNullableWithAggregatesFilter<"audit_logs"> | string | null
     audit_token?: StringNullableWithAggregatesFilter<"audit_logs"> | string | null
+    content_hash?: StringNullableWithAggregatesFilter<"audit_logs"> | string | null
     status?: IntNullableWithAggregatesFilter<"audit_logs"> | number | null
     is_sensitive?: BoolNullableWithAggregatesFilter<"audit_logs"> | boolean | null
     external_audit_id?: StringNullableWithAggregatesFilter<"audit_logs"> | string | null
@@ -7414,6 +7433,7 @@ export namespace Prisma {
     output_content: string
     model_name?: string | null
     audit_token?: string | null
+    content_hash?: string | null
     status?: number | null
     is_sensitive?: boolean | null
     external_audit_id?: string | null
@@ -7431,6 +7451,7 @@ export namespace Prisma {
     output_content: string
     model_name?: string | null
     audit_token?: string | null
+    content_hash?: string | null
     status?: number | null
     is_sensitive?: boolean | null
     external_audit_id?: string | null
@@ -7448,6 +7469,7 @@ export namespace Prisma {
     output_content?: StringFieldUpdateOperationsInput | string
     model_name?: NullableStringFieldUpdateOperationsInput | string | null
     audit_token?: NullableStringFieldUpdateOperationsInput | string | null
+    content_hash?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     is_sensitive?: NullableBoolFieldUpdateOperationsInput | boolean | null
     external_audit_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7465,6 +7487,7 @@ export namespace Prisma {
     output_content?: StringFieldUpdateOperationsInput | string
     model_name?: NullableStringFieldUpdateOperationsInput | string | null
     audit_token?: NullableStringFieldUpdateOperationsInput | string | null
+    content_hash?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     is_sensitive?: NullableBoolFieldUpdateOperationsInput | boolean | null
     external_audit_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7482,6 +7505,7 @@ export namespace Prisma {
     output_content: string
     model_name?: string | null
     audit_token?: string | null
+    content_hash?: string | null
     status?: number | null
     is_sensitive?: boolean | null
     external_audit_id?: string | null
@@ -7499,6 +7523,7 @@ export namespace Prisma {
     output_content?: StringFieldUpdateOperationsInput | string
     model_name?: NullableStringFieldUpdateOperationsInput | string | null
     audit_token?: NullableStringFieldUpdateOperationsInput | string | null
+    content_hash?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     is_sensitive?: NullableBoolFieldUpdateOperationsInput | boolean | null
     external_audit_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -7516,6 +7541,7 @@ export namespace Prisma {
     output_content?: StringFieldUpdateOperationsInput | string
     model_name?: NullableStringFieldUpdateOperationsInput | string | null
     audit_token?: NullableStringFieldUpdateOperationsInput | string | null
+    content_hash?: NullableStringFieldUpdateOperationsInput | string | null
     status?: NullableIntFieldUpdateOperationsInput | number | null
     is_sensitive?: NullableBoolFieldUpdateOperationsInput | boolean | null
     external_audit_id?: NullableStringFieldUpdateOperationsInput | string | null
@@ -8033,6 +8059,7 @@ export namespace Prisma {
     output_content?: SortOrder
     model_name?: SortOrder
     audit_token?: SortOrder
+    content_hash?: SortOrder
     status?: SortOrder
     is_sensitive?: SortOrder
     external_audit_id?: SortOrder
@@ -8054,6 +8081,7 @@ export namespace Prisma {
     output_content?: SortOrder
     model_name?: SortOrder
     audit_token?: SortOrder
+    content_hash?: SortOrder
     status?: SortOrder
     is_sensitive?: SortOrder
     external_audit_id?: SortOrder
@@ -8071,6 +8099,7 @@ export namespace Prisma {
     output_content?: SortOrder
     model_name?: SortOrder
     audit_token?: SortOrder
+    content_hash?: SortOrder
     status?: SortOrder
     is_sensitive?: SortOrder
     external_audit_id?: SortOrder

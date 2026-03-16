@@ -61,7 +61,8 @@ CREATE TABLE IF NOT EXISTS audit_logs (
     input_prompt      TEXT NOT NULL,
     output_content    TEXT NOT NULL,
     model_name        VARCHAR(50),
-    audit_token       TEXT,
+    audit_token       TEXT,                        -- 零宽水印/溯源标识
+    content_hash      VARCHAR(64),                 -- AI生成内容（含水印）的 SHA-256 哈希值，用于内容防篡改验证
     status            SMALLINT DEFAULT 1,          -- 0: 审核拦截, 1: 通过, 2: 系统拦截
     is_sensitive      BOOLEAN DEFAULT FALSE,
     external_audit_id VARCHAR(100),
@@ -84,6 +85,7 @@ COMMENT ON COLUMN audit_logs.input_prompt IS '用户原始输入';
 COMMENT ON COLUMN audit_logs.output_content IS 'AI生成文本';
 COMMENT ON COLUMN audit_logs.model_name IS '底层模型名称（如 DeepSeek-V3）';
 COMMENT ON COLUMN audit_logs.audit_token IS '零宽水印/溯源标识';
+COMMENT ON COLUMN audit_logs.content_hash IS 'AI生成内容（含水印）的 SHA-256 哈希值（64位十六进制），用于内容防篡改验证';
 COMMENT ON COLUMN audit_logs.status IS '审核状态：0=审核拦截/手动标记违规, 1=通过, 2=系统拦截';
 COMMENT ON COLUMN audit_logs.is_sensitive IS '是否命中外部审核API的敏感词';
 COMMENT ON COLUMN audit_logs.external_audit_id IS '外部审核接口的RequestID';

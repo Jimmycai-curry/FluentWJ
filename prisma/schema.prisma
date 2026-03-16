@@ -32,6 +32,7 @@ model audit_logs {
   output_content    String
   model_name        String?   @db.VarChar(50)
   audit_token       String?
+  content_hash      String?   @db.VarChar(64)  // SHA-256 哈希，用于验证内容是否被篡改
   status            Int?      @default(1) @db.SmallInt
   is_sensitive      Boolean?  @default(false)
   external_audit_id String?   @db.VarChar(100)

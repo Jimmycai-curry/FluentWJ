@@ -5,7 +5,7 @@ import crypto from 'crypto';
 import { prisma } from '@/lib/db';
 import { callDeepSeek, type DeepSeekParams } from '@/lib/deepseek';
 import { moderateContent } from '@/lib/moderation';
-import { addWatermark } from '@/utils/watermark';
+import { addWatermark, calculateContentHash } from '@/utils/watermark';
 import { ValidationError, AIServiceError } from '@/utils/error';
 
 /**
@@ -188,6 +188,10 @@ export async function generateMail(params: GenerateMailParams): Promise<Generate
     console.log('[AIService] 步骤 5/7: 植入水印...');
     const contentWithWatermark = addWatermark(generatedContent, auditToken);
 
+    // 计算最终内容的 SHA-256 哈希，用于事后验证内容未被篡改
+    const contentHash = calculateContentHash(contentWithWatermark);
+    console.log('[AIService] 内容哈希计算完成:', contentHash);
+
     // ========== 步骤 6: 数据库事务写入 ==========
     console.log('[AIService] 步骤 6/7: 写入数据库...');
 
@@ -204,6 +208,7 @@ export async function generateMail(params: GenerateMailParams): Promise<Generate
           output_content: contentWithWatermark,
           model_name: 'DeepSeek-V3',
           audit_token: auditToken,
+          content_hash: contentHash,   // SHA-256 哈希，用于防篡改验证
           status: 1, // 审核通过
           is_sensitive: false,
           external_audit_id: inputModeration.externalAuditId

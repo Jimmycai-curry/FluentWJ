@@ -1,6 +1,8 @@
 // Spec: /docs/specs/watermark-service.md
 // 说明: 水印生成工具，为 AI 生成的内容植入显式和隐式水印
 
+import { createHash } from 'crypto';
+
 /**
  * 零宽字符定义
  */
@@ -13,18 +15,18 @@ const ZERO_WIDTH_CHARS = {
 /**
  * 添加显式水印（可见声明）
  * 
- * 注意：根据产品设计，显式声明已在页面 UI 中展示（"ℹ️ 由 FluentWJ 生成"）
- * 因此不再在生成内容中添加可见文本，避免：
- * 1. 重复提示（影响用户体验）
- * 2. 泄露内部溯源标识（安全风险）
+ * 满足《互联网信息服务深度合成管理规定》第十七条要求：
+ * "深度合成服务提供者应当在生成或者编辑的信息内容的合理位置、区域进行显著标识"
+ * 
+ * 在内容末尾追加一行可见声明，确保内容离开系统后（如被复制到邮件）接收方仍能看到标识。
+ * 不暴露 auditToken，仅声明 AI 生成来源。
  * 
  * @param content - 原始内容
- * @param auditToken - 审计日志 UUID（已弃用此参数，保留以兼容接口）
- * @returns 原始内容（不添加任何可见文本）
+ * @returns 追加了显式声明的内容
  */
-function addVisibleWatermark(content: string, auditToken: string): string {
-  // 不再添加可见水印，依赖页面 UI 提示
-  return content;
+function addVisibleWatermark(content: string): string {
+  const declaration = '\n\n【AI 生成】本内容由 FluentWJ AI 算法辅助生成，仅供商务写作参考，不构成任何法律要约或承诺，请您在使用前核实全部信息真实性。';
+  return content + declaration;
 }
 
 /**
@@ -120,42 +122,57 @@ function embedInvisibleWatermark(content: string, watermark: string): string {
 }
 
 /**
- * 为内容添加隐式水印（零宽字符）
+ * 为内容添加完整水印（隐式 + 显式双重标识）
  * 
- * 说明：
- * - 隐式水印：通过零宽字符嵌入 auditToken，用户不可见，用于技术溯源
- * - 显式声明：已在页面 UI 中展示（"ℹ️ 由 FluentWJ 生成"），不在内容中重复
+ * 执行顺序：
+ * 1. 隐式水印：通过零宽字符将 auditToken 编码嵌入，用户不可见，用于技术溯源
+ * 2. 显式声明：在内容末尾追加一行可见的 AI 生成声明，满足监管要求
  * 
  * @param content - 原始内容
- * @param auditToken - 审计日志 UUID（用于溯源）
- * @returns 带隐式水印的内容
+ * @param auditToken - 审计日志 UUID（用于溯源，不会明文出现在内容中）
+ * @returns 带双重水印的内容
  */
 export function addWatermark(content: string, auditToken: string): string {
-  console.log('[Watermark] 添加隐式水印...', { 
+  console.log('[Watermark] 添加双重水印...', { 
     auditToken,
     contentLength: content.length 
   });
 
   try {
-    // 添加隐式水印（零宽字符）
+    // 步骤 1：嵌入隐式水印（零宽字符，用户不可见）
     const invisibleWatermark = encodeToZeroWidth(auditToken);
-    const contentWithWatermark = embedInvisibleWatermark(content, invisibleWatermark);
+    const contentWithInvisible = embedInvisibleWatermark(content, invisibleWatermark);
 
-    console.log('[Watermark] 隐式水印添加完成', {
+    // 步骤 2：追加显式声明（末尾可见文本，满足监管要求）
+    const contentWithBoth = addVisibleWatermark(contentWithInvisible);
+
+    console.log('[Watermark] 双重水印添加完成', {
       originalLength: content.length,
-      finalLength: contentWithWatermark.length,
+      finalLength: contentWithBoth.length,
       invisibleWatermarkLength: invisibleWatermark.length
     });
 
-    return contentWithWatermark;
+    return contentWithBoth;
 
   } catch (error) {
-    console.error('[Watermark] 隐式水印添加失败:', error);
+    console.error('[Watermark] 水印添加失败:', error);
     
-    // 降级：返回原始内容（依赖数据库记录进行溯源）
-    console.warn('[Watermark] 降级：返回原始内容，溯源依赖数据库记录');
-    return content;
+    // 降级：至少保留显式声明，确保合规
+    console.warn('[Watermark] 降级：添加显式声明，溯源依赖数据库记录');
+    return addVisibleWatermark(content);
   }
+}
+
+/**
+ * 计算内容的 SHA-256 哈希值
+ * 
+ * 用途：存入 audit_logs.content_hash，用于事后验证内容是否被篡改
+ * 
+ * @param content - 带水印的最终内容
+ * @returns 64 位十六进制 SHA-256 哈希字符串
+ */
+export function calculateContentHash(content: string): string {
+  return createHash('sha256').update(content, 'utf8').digest('hex');
 }
 
 /**
