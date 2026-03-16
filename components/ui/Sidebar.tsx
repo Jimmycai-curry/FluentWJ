@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from "react"; // 引入 useState 和 useEffect
 import { useRouter } from "next/navigation"; // 引入 useRouter 用于页面跳转
-import { Mail, PenSquare, History, ChevronLeft, ChevronRight, Heart, HeartOff, LogOut } from "lucide-react"; // 新增 LogOut 图标
+import { Mail, PenSquare, History, ChevronLeft, ChevronRight, Heart, HeartOff, LogOut, UserX } from "lucide-react"; // 新增 LogOut、UserX 图标
 
 /**
  * Sidebar 组件
@@ -38,6 +38,13 @@ export function Sidebar({ activeNav = 'writing' }: SidebarProps) {
   
   // 管理登出加载状态
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  
+  // 管理注销确认弹窗的显示状态
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  
+  // 管理注销加载状态
+  const [isDeleting, setIsDeleting] = useState(false);
+  
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -114,6 +121,48 @@ export function Sidebar({ activeNav = 'writing' }: SidebarProps) {
       alert('登出失败，请重试');
       setIsLoggingOut(false);
       setShowLogoutConfirm(false);
+    }
+  };
+
+  // 显示注销确认弹窗
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  // 取消注销
+  const handleCancelDelete = () => {
+    setShowDeleteConfirm(false);
+  };
+
+  // 确认注销账号
+  const handleConfirmDelete = async () => {
+    setIsDeleting(true);
+    
+    try {
+      // 调用后端注销接口
+      const response = await fetch('/api/auth/delete-account', {
+        method: 'POST',
+        credentials: 'include',
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        console.log('[DeleteAccount] 注销成功，跳转到首页');
+        alert('账号已注销成功');
+        // 跳转到 Landing Page
+        router.push('/');
+      } else {
+        console.error('[DeleteAccount] 注销失败:', result.message);
+        alert(result.message || '注销失败，请重试');
+        setIsDeleting(false);
+        setShowDeleteConfirm(false);
+      }
+    } catch (error) {
+      console.error('[DeleteAccount] 注销请求失败:', error);
+      alert('注销失败，请重试');
+      setIsDeleting(false);
+      setShowDeleteConfirm(false);
     }
   };
 
@@ -234,6 +283,31 @@ export function Sidebar({ activeNav = 'writing' }: SidebarProps) {
             </span>
           </button>
         )}
+
+        {/* 注销账号按钮 */}
+        {isCollapsed ? (
+          // 收缩状态：只显示图标按钮
+          <button
+            onClick={handleDeleteClick}
+            disabled={isDeleting}
+            className="flex items-center justify-center p-3 rounded-lg bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 hover:text-orange-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            title="注销账号"
+          >
+            <UserX size={20} />
+          </button>
+        ) : (
+          // 展开状态：完整按钮
+          <button
+            onClick={handleDeleteClick}
+            disabled={isDeleting}
+            className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 hover:text-orange-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <UserX size={20} />
+            <span className="text-sm font-medium">
+              {isDeleting ? '注销中...' : '注销账号'}
+            </span>
+          </button>
+        )}
       </div>
 
       {/* 收缩/展开按钮 - 绝对定位在右侧边缘中间 */}
@@ -292,6 +366,49 @@ export function Sidebar({ activeNav = 'writing' }: SidebarProps) {
                 className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoggingOut ? '退出中...' : '确认退出'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 注销账号确认弹窗 */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-sm w-full mx-4">
+            {/* 弹窗标题 */}
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              确认注销账号
+            </h3>
+            
+            {/* 弹窗内容 */}
+            <div className="text-gray-600 dark:text-gray-300 mb-6">
+              <p className="mb-2">您确定要注销账号吗？此操作<strong>不可撤销</strong>，将会：</p>
+              <ul className="list-disc list-inside text-sm space-y-1">
+                <li>删除您的所有个人信息和历史记录</li>
+                <li>清除您的登录状态</li>
+                <li>您将无法再使用本服务</li>
+              </ul>
+            </div>
+            
+            {/* 按钮组 */}
+            <div className="flex gap-3 justify-end">
+              {/* 取消按钮 */}
+              <button
+                onClick={handleCancelDelete}
+                disabled={isDeleting}
+                className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                取消
+              </button>
+              
+              {/* 确认按钮 */}
+              <button
+                onClick={handleConfirmDelete}
+                disabled={isDeleting}
+                className="px-4 py-2 rounded-lg bg-orange-500 hover:bg-orange-600 text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isDeleting ? '注销中...' : '确认注销'}
               </button>
             </div>
           </div>
