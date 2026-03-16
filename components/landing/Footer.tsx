@@ -32,12 +32,13 @@ export default function Footer() {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                alert('ICP 备案信息');
+                alert('粤ICP备2025514736号-1');
               }}
             >
               ICP 备案信息
             </a>
-            <a
+            {/* 算法备案号：备案下来后取消注释 */}
+            {/* <a
               className="text-slate-600 dark:text-slate-400 hover:text-primary text-sm font-medium transition-colors"
               href="#"
               onClick={(e) => {
@@ -46,7 +47,7 @@ export default function Footer() {
               }}
             >
               AI 算法备案登记
-            </a>
+            </a> */}
             {/* 隐私政策 - 跳转到 /privacy 页面 */}
             <a
               className="text-slate-600 dark:text-slate-400 hover:text-primary text-sm font-medium transition-colors"
@@ -64,6 +65,15 @@ export default function Footer() {
               rel="noopener noreferrer"
             >
               服务协议
+            </a>
+            {/* 算法服务说明 - 跳转到 /algorithm 页面 */}
+            <a
+              className="text-slate-600 dark:text-slate-400 hover:text-primary text-sm font-medium transition-colors"
+              href="/algorithm"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              算法服务说明
             </a>
           </div>
         </div>

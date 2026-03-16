@@ -37,7 +37,7 @@ export default function LoginPage() {
 
       {/* Footer 版权信息 */}
       <footer className="mt-auto py-8 text-center text-xs text-gray-400 dark:text-gray-500 space-y-1">
-        <p>© 2024 FluentWJ AI Writing Assistant. All rights reserved.</p>
+        <p>© 2026 FluentWJ AI Writing Assistant. All rights reserved.</p>
         <div className="flex justify-center gap-4">
           <span>粤ICP备2023000000号-1</span>
           <span>AI 算法备案号: 44030000000000000001</span>
